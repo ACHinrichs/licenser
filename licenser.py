@@ -1,10 +1,9 @@
 import argparse
 import os
+import datetime
 
 scriptpath = os.path.dirname(os.path.realpath(__file__)) 
 licensepath = os.path.join(scriptpath ,"licenses")
-
-
 
 def licenseExists(name):
     return(os.path.isfile(os.path.join(licensepath, name.lower())))
@@ -44,6 +43,7 @@ if args.listlicenses:
     exit()
 if args.update:
     print("I will update the LICENSE file in this directory")
+    #TODO
 else:
     print("I will create a new LICENSE file in this directory")
 
@@ -57,4 +57,11 @@ else:
     author = args.author
     if author == "":
         author = input("Please specify the author: ")
-    
+
+    # Place license here
+    with open(os.path.join(licensepath,license),"r") as template:
+        with open(os.path.join(args.directory,"LICENSE"),"w+") as outputFile:
+            for line in template:
+                line=line.replace("[year]",str(datetime.date.today().year))
+                line=line.replace("[fullname]",author)
+                outputFile.write(line)
